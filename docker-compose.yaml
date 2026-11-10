@@ -9,10 +9,9 @@ services:
         protocol: tcp
         mode: ingress
     environment:
-      DATABASE_URL: "postgresql+psycopg://agenda_user:${POSTGRES_PASSWORD}@db:5432/agenda_db"
+      DATABASE_URL: "postgresql+psycopg://agenda_user:${POSTGRES_PASSWORD:-changeme}@db:5432/agenda_db"
     depends_on:
-      db:
-        condition: service_healthy
+      - db
     networks:
       - examen_net
     deploy:
