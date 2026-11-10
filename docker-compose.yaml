@@ -1,20 +1,20 @@
+version: '3.8'
 
 services:
   web:
-    image: emigape/cn2-examen:latest
-
+    image: ev3thlm/cn2-agendatec:latest
     ports:
       - target: 5000
         published: 5051
         protocol: tcp
         mode: ingress
-
     environment:
       DATABASE_URL: "postgresql+psycopg://agenda_user:${POSTGRES_PASSWORD}@db:5432/agenda_db"
-
+    depends_on:
+      db:
+        condition: service_healthy
     networks:
       - examen_net
-
     deploy:
       replicas: 1
       restart_policy:
@@ -30,24 +30,19 @@ services:
 
   db:
     image: postgres:17-alpine
-
     environment:
       POSTGRES_DB: agenda_db
       POSTGRES_USER: agenda_user
-      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
-
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:-changeme}"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-
     networks:
       - examen_net
-
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U agenda_user -d agenda_db"]
       interval: 10s
       timeout: 5s
       retries: 5
-
     deploy:
       replicas: 1
       restart_policy:
