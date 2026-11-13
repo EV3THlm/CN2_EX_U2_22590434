@@ -23,9 +23,6 @@ services:
       update_config:
         parallelism: 1
         order: start-first
-      placement:
-        constraints:
-          - node.role == manager
 
   db:
     image: postgres:17-alpine
