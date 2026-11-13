@@ -23,6 +23,10 @@ services:
       update_config:
         parallelism: 1
         order: start-first
+      # ¡AÑADE ESTO DE NUEVO PARA FORZAR QUE CORRA EN EL WORKER ARM!
+      placement:
+        constraints:
+          - node.hostname == rba-nube2
 
   db:
     image: postgres:17-alpine
